@@ -1,0 +1,42 @@
+.card {
+    min-width: 455px;
+    min-height: 272px;
+}
+
+.card-img {
+    display: 'block';
+    width: 180px;
+    min-height: 270px;
+    object-fit: contain;
+}
+
+.card-title {
+    margin: 0;
+    margin-bottom: 5px;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28px;
+}
+
+.card-date {
+    margin-bottom: 5px;
+    font-size: 12px;
+    line-height: 22px;
+}
+
+.card-genre {
+    margin-bottom: 10px;
+    font-size: 12px;
+}
+
+.card-descr {
+    margin: 0 0 auto 0;
+    font-size: 12px;
+    line-height: 22px;
+}
+
+.card-rate {
+    // margin-top: auto;
+    font-size: 17px;
+}
