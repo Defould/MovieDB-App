@@ -1,28 +1,29 @@
 import { Component } from 'react';
 import { Input, Tabs } from 'antd';
+import { CloseOutlined } from '@ant-design/icons';
+import { debounce } from 'lodash';
 
 import './App.css';
 
 import MovieService from '../../services/movieService';
-// import MovieList from '../movieList/movieList';
+import MovieList from '../movieList/movieList';
 
 class App extends Component {
-  componentDidMount() {
-    this.initState();
-  }
   state = {
     moviesData: [],
-    isLoading: true,
+    isLoading: false,
     error: null,
-    input: 'return',
+    input: '',
     curPage: 1,
     noResults: false,
     totalResults: null,
   };
 
-  initState = () => {
+  getMovies = () => {
     const movieService = new MovieService();
     const { input, curPage } = this.state;
+
+    this.setState({ moviesData: [], isLoading: true, noResults: false });
 
     movieService
       .getSearchMovies(input, curPage)
@@ -36,8 +37,20 @@ class App extends Component {
       .catch((e) => this.setState({ isLoading: false, error: e }));
   };
 
+  debouncedGetMovies = debounce(this.getMovies, 1000);
+
   onChangeInput = (text) => {
     this.setState({ input: text });
+    this.debouncedGetMovies();
+  };
+
+  clearInput = () => {
+    this.setState({ input: '' });
+  };
+
+  onChangePage = (page) => {
+    this.setState({ curPage: page });
+    this.getMovies();
   };
 
   items = [
@@ -52,6 +65,9 @@ class App extends Component {
   ];
 
   render() {
+    const { moviesData, isLoading, error, noResults } = this.state;
+    const suffix = this.state.input ? <CloseOutlined onClick={this.clearInput} /> : <span />;
+
     return (
       <div className="app">
         <Tabs defaultActiveKey="1" items={this.items} onChange={this.onChange} />
@@ -60,8 +76,16 @@ class App extends Component {
           onChange={(e) => this.onChangeInput(e.target.value)}
           value={this.state.input}
           placeholder="Type to search..."
+          suffix={suffix}
         />
-        {/* <MovieList props={this.state} /> */}
+
+        <MovieList
+          moviesData={moviesData}
+          isLoading={isLoading}
+          error={error}
+          noResults={noResults}
+          onChangePage={this.onChangePage}
+        />
       </div>
     );
   }

@@ -4,6 +4,7 @@ import placeholderImg from '../sourсes/img-not-found.png';
 
 class MovieService {
   _apiBase = 'https://api.themoviedb.org/3/search/movie?';
+  _guestUrl = 'https://api.themoviedb.org/3/authentication/guest_session/new';
 
   _options = {
     method: 'GET',

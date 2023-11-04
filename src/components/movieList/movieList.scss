@@ -6,3 +6,29 @@
     grid-row-gap: 35px;
     margin-bottom: 35px;
 }
+
+.ant-spin-nested-loading >div>.ant-spin {
+    position: absolute;
+    top: 0;
+    inset-inline-start: 0;
+    z-index: 4;
+    display: block;
+    width: 50%;
+    height: 50%;
+    max-height: 400px;
+    transform: translateX(158%);
+}
+
+.pagination {
+  position: absolute;
+  bottom: 20px;
+  margin-left: 46%;
+  transform: translateX(-50%);
+}
+
+.alert {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}

@@ -33,7 +33,7 @@ function MovieItem({ movie }) {
 
           <Typography.Text className="card-descr">{descr}</Typography.Text>
 
-          <Rate className="card-rate" allowHalf defaultValue={5} count={10} />
+          <Rate className="card-rate" allowHalf defaultValue={0} count={10} />
         </Flex>
       </Flex>
     </Card>
