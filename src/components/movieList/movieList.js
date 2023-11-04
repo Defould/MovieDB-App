@@ -1,11 +1,11 @@
 import { Offline, Online } from 'react-detect-offline';
-import { Pagination, Spin, Alert } from 'antd';
+import { Spin, Alert } from 'antd';
 
 import MovieItem from '../movieItem/movieItem';
 
 import './movieList.scss';
 
-const MovieList = ({ moviesData, isLoading, error, noResults, onChangePage }) => {
+const MovieList = ({ moviesData, isLoading, error, noResults }) => {
   const movieList = moviesData.map((movie) => <MovieItem key={movie.id} movie={movie} />);
 
   const spin = isLoading ? (
@@ -44,11 +44,6 @@ const MovieList = ({ moviesData, isLoading, error, noResults, onChangePage }) =>
     />
   );
 
-  const pagination =
-    moviesData.length > 0 ? (
-      <Pagination className="pagination" onChange={onChangePage()} defaultCurrent={1} total={50} defaultPageSize={20} />
-    ) : null;
-
   return (
     <>
       <Online>
@@ -57,7 +52,6 @@ const MovieList = ({ moviesData, isLoading, error, noResults, onChangePage }) =>
           {errorDetect}
           {notFound}
           {movieList}
-          {pagination}
         </div>
       </Online>
       <Offline>
