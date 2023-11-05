@@ -16,7 +16,7 @@ class SearchPage extends Component {
     input: '',
     curPage: 1,
     noResults: false,
-    totalResults: null,
+    totalRes: 0,
   };
 
   getMovies = () => {
@@ -27,17 +27,17 @@ class SearchPage extends Component {
 
     movieService
       .getSearchMovies(input, curPage)
-      .then((movieData) => {
+      .then(([totalRes, movieData]) => {
         if (movieData.length === 0) {
           return this.setState({ isLoading: false, noResults: true });
         } else {
-          this.setState({ moviesData: movieData, isLoading: false });
+          this.setState({ moviesData: movieData, isLoading: false, totalRes: totalRes });
         }
       })
       .catch((e) => this.setState({ isLoading: false, error: e }));
   };
 
-  debouncedGetMovies = debounce(this.getMovies, 1000);
+  debouncedGetMovies = debounce(this.getMovies, 500);
 
   onChangeInput = (text) => {
     this.setState({ input: text });
@@ -49,13 +49,12 @@ class SearchPage extends Component {
   };
 
   onChangePage = (page) => {
-    console.log(page);
     this.setState({ curPage: page });
-    this.getMovies();
+    this.debouncedGetMovies();
   };
 
   render() {
-    const { moviesData, isLoading, error, curPage, noResults } = this.state;
+    const { moviesData, isLoading, error, curPage, noResults, totalRes, estimation } = this.state;
     const suffix = this.state.input ? <CloseOutlined onClick={this.clearInput} /> : <span />;
     const pagination =
       moviesData.length > 0 ? (
@@ -64,8 +63,9 @@ class SearchPage extends Component {
           onChange={this.onChangePage}
           defaultCurrent={1}
           current={curPage}
-          total={50}
+          total={totalRes}
           defaultPageSize={20}
+          showSizeChanger={false}
         />
       ) : null;
 
@@ -79,7 +79,13 @@ class SearchPage extends Component {
           suffix={suffix}
         />
 
-        <MovieList moviesData={moviesData} isLoading={isLoading} error={error} noResults={noResults} />
+        <MovieList
+          moviesData={moviesData}
+          isLoading={isLoading}
+          error={error}
+          noResults={noResults}
+          estimation={estimation}
+        />
         {pagination}
       </>
     );

@@ -60,7 +60,7 @@ class MovieService {
       this._options
     );
     if (res.results.length > 0) {
-      return res.results.map(this._transformMovieData);
+      return [res.total_results, res.results.map(this._transformMovieData)];
     } else {
       return [];
     }
