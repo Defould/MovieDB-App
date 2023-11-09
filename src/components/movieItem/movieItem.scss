@@ -1,10 +1,8 @@
 .card {
-    min-width: 455px;
-    min-height: 272px;
+    min-height: 245px;
 }
 
 .card-img {
-    display: 'block';
     width: 180px;
     min-height: 270px;
     object-fit: contain;
@@ -38,6 +36,10 @@
 }
 
 .card-genre {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 5px;
+    align-items: center;
     margin-bottom: 10px;
     font-size: 12px;
 }
@@ -49,6 +51,38 @@
 }
 
 .card-rate {
-    // margin-top: auto;
-    font-size: 17px;
+    font-size: 1.2em;
+}
+
+@media (max-width: 1000px) {
+    .card-title {
+        font-size: 18px;
+    }
+    .card-descr {
+        font-size: 10px;
+    }
+    .card-rate {
+        font-size: .9em;
+    } 
+}
+@media (max-width: 870px) {
+    .card-rate {
+        font-size: .7em;
+    } 
+}
+@media (max-width: 475px) {
+    .card-img {
+        width: 162px;
+        min-height: 180px;
+        object-fit: contain;
+    }
+    .card-title {
+        font-size: 16px;
+    }
+    .card-descr {
+        font-size: 12px;
+    }
+    .card-rate {
+        font-size: .8em;
+    } 
 }

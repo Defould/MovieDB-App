@@ -9,6 +9,10 @@ import MovieList from '../movieList/movieList';
 import './searchPage.scss';
 
 class SearchPage extends Component {
+  componentDidMount() {
+    this.getSession();
+  }
+
   state = {
     moviesData: [],
     isLoading: false,
@@ -17,13 +21,22 @@ class SearchPage extends Component {
     curPage: 1,
     noResults: false,
     totalRes: 0,
+    rate: 0,
+  };
+
+  getSession = () => {
+    const session = new MovieService();
+    session
+      .getGuestSession()
+      .then((res) => console.log(res))
+      .catch((e) => console.log(e));
   };
 
   getMovies = () => {
     const movieService = new MovieService();
     const { input, curPage } = this.state;
 
-    this.setState({ moviesData: [], isLoading: true, noResults: false });
+    // this.setState({ moviesData: [], isLoading: true, noResults: false });
 
     movieService
       .getSearchMovies(input, curPage)
@@ -31,7 +44,15 @@ class SearchPage extends Component {
         if (movieData.length === 0) {
           return this.setState({ isLoading: false, noResults: true });
         } else {
-          this.setState({ moviesData: movieData, isLoading: false, totalRes: totalRes });
+          const moviesList = JSON.parse(localStorage.getItem('ratedMovies'));
+          const moviesData = movieData.map((movie) => {
+            const ratedMovie = moviesList.find((m) => m.id === movie.id);
+            if (ratedMovie) {
+              return { ...movie, rate: ratedMovie.rate };
+            }
+            return movie;
+          });
+          this.setState({ moviesData: moviesData, isLoading: false, totalRes: totalRes });
         }
       })
       .catch((e) => this.setState({ isLoading: false, error: e }));
@@ -54,7 +75,7 @@ class SearchPage extends Component {
   };
 
   render() {
-    const { moviesData, isLoading, error, curPage, noResults, totalRes, estimation } = this.state;
+    const { moviesData, isLoading, error, curPage, noResults, totalRes, estimation, rate } = this.state;
     const suffix = this.state.input ? <CloseOutlined onClick={this.clearInput} /> : <span />;
     const pagination =
       moviesData.length > 0 ? (
@@ -85,6 +106,7 @@ class SearchPage extends Component {
           error={error}
           noResults={noResults}
           estimation={estimation}
+          rate={rate}
         />
         {pagination}
       </>

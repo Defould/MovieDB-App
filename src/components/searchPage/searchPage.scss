@@ -14,7 +14,10 @@
 
 .pagination {
   position: absolute;
+  display: flex;
+  justify-content: center;
+  min-width: 316px;
   bottom: -50px;
-  margin-left: 50%;
+  left: 50%;
   transform: translateX(-50%);
 }

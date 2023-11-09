@@ -1,9 +1,39 @@
-import { Card, Flex, Typography, Tag, Rate } from 'antd';
+import { Card, Flex, Rate, Tag, Typography } from 'antd';
+
+import { useGenres } from '../context/GenreContext';
 
 import './movieItem.scss';
 
 function MovieItem({ movie }) {
-  const { title, release, genre, descr, poster, estimation } = movie;
+  const { title, release, genre, descr, poster, estimation, rate } = movie;
+  const genres = useGenres();
+
+  const genreNames =
+    genre.length > 0
+      ? genre.map((genreId) => {
+        const matchingGenre = genres.find((genre) => genre.id === genreId);
+        return matchingGenre ? matchingGenre.name : 'Unknown Genre';
+      })
+      : ['Unknown Genre'];
+
+  function onRated(rate) {
+    let moviesList = JSON.parse(localStorage.getItem('ratedMovies'));
+
+    if (!moviesList) {
+      moviesList = [];
+    }
+
+    const movieData = { ...movie, rate };
+    const index = moviesList.findIndex((movieItem) => movieItem.id === movieData.id);
+
+    if (index !== -1) {
+      moviesList[index] = movieData;
+    } else {
+      moviesList.push(movieData);
+    }
+
+    localStorage.setItem('ratedMovies', JSON.stringify(moviesList));
+  }
 
   function getColorEstimation(estimation) {
     if (estimation >= 0 && estimation < 3) {
@@ -45,19 +75,19 @@ function MovieItem({ movie }) {
             {release}
           </Typography.Text>
 
-          <Tag className="card-genre">{genre}</Tag>
+          <div className="card-genre">
+            {genreNames.map((genreName, index) => (
+              <Tag key={index}>{genreName || 'Unknown Genre'}</Tag>
+            ))}
+          </div>
 
           <Typography.Text className="card-descr">{descr}</Typography.Text>
 
-          <Rate className="card-rate" allowHalf defaultValue={0} count={10} />
+          <Rate className="card-rate" allowHalf defaultValue={rate} count={10} onChange={onRated} />
         </Flex>
       </Flex>
     </Card>
   );
 }
-
-MovieItem.defaultProps = {
-  poster: 'src/sourсes/img-not-found.png',
-};
 
 export default MovieItem;
