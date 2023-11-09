@@ -10,7 +10,8 @@
 		"plugin:react/recommended",
 		"plugin:prettier/recommended",
 		"plugin:import/errors",
-		"plugin:import/warnings"
+		"plugin:import/warnings",
+		"prettier"
 	],
 	"parserOptions": {
 		"ecmaFeatures": {
@@ -21,7 +22,7 @@
 	},
 	"plugins": ["react", "prettier", "import"],
 	"rules": {
-		"indent": ["error", 2,  { "SwitchCase": 1 }],
+		"indent": ["warn", 2,  { "SwitchCase": 1 }],
 		"no-unused-vars": ["warn", { "args": "after-used", "argsIgnorePattern": "^_' "}],
 		"prettier/prettier": ["warn", { "endOfLine": "auto" }],
 		"linebreak-style": [0, "unix"],

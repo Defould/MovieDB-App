@@ -46,6 +46,7 @@ class RatedPage extends Component {
   };
 
   render() {
+    console.log(this.state.moviesData);
     const { moviesData, curPage, noResults, totalRes, rate, defaultPageSize } = this.state;
     const pagination =
       moviesData.length > 0 ? (

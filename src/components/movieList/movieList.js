@@ -7,7 +7,6 @@ import './movieList.scss';
 
 const MovieList = ({ moviesData, isLoading, error, noResults }) => {
   const movieList = moviesData.map((movie) => <MovieItem key={movie.id} movie={movie} />);
-
   const spin = isLoading ? (
     <Spin className="spin" tip="Loading" size="large">
       <div />

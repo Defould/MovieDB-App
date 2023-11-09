@@ -36,7 +36,7 @@ class SearchPage extends Component {
     const movieService = new MovieService();
     const { input, curPage } = this.state;
 
-    // this.setState({ moviesData: [], isLoading: true, noResults: false });
+    this.setState({ moviesData: [], isLoading: true, noResults: false });
 
     movieService
       .getSearchMovies(input, curPage)
@@ -44,15 +44,16 @@ class SearchPage extends Component {
         if (movieData.length === 0) {
           return this.setState({ isLoading: false, noResults: true });
         } else {
-          const moviesList = JSON.parse(localStorage.getItem('ratedMovies'));
-          const moviesData = movieData.map((movie) => {
-            const ratedMovie = moviesList.find((m) => m.id === movie.id);
-            if (ratedMovie) {
-              return { ...movie, rate: ratedMovie.rate };
-            }
-            return movie;
-          });
-          this.setState({ moviesData: moviesData, isLoading: false, totalRes: totalRes });
+          //продебажить
+          // const moviesList = JSON.parse(localStorage.getItem('ratedMovies'));
+          // const moviesData = movieData.map((movie) => {
+          //   const ratedMovie = moviesList.find((m) => m.id === movie.id);
+          //   if (ratedMovie) {
+          //     return { ...movie, rate: ratedMovie.rate };
+          //   }
+          //   return movie;
+          // });
+          this.setState({ moviesData: movieData, isLoading: false, totalRes: totalRes });
         }
       })
       .catch((e) => this.setState({ isLoading: false, error: e }));
