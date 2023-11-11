@@ -1,73 +1,68 @@
-import { Component } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Pagination } from 'antd';
 
+import { GuestId } from '../context/movieContext';
+import MovieService from '../../services/movieService';
 import MovieList from '../movieList/movieList';
 
-class RatedPage extends Component {
-  componentDidMount() {
-    this.getRatedMovies();
-  }
+const RatedPage = () => {
+  const [ratedMovies, setRatedMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [curPage, setCurPage] = useState(1);
+  const [noResults, setNoResults] = useState(false);
+  const [totalRes, setTotalRes] = useState(0);
+  const defaultPageSize = 20;
+  // console.log(ratedMovies);
 
-  state = {
-    moviesData: [],
-    curPage: 1,
-    defaultPageSize: 20,
-    noResults: true,
-    totalRes: 0,
-    rate: 0,
-  };
+  const guestId = useContext(GuestId);
 
-  getRatedMovies() {
-    const moviesList = JSON.parse(localStorage.getItem('ratedMovies'));
+  const movieService = new MovieService();
 
-    if (moviesList) {
-      const { curPage, defaultPageSize } = this.state;
-      const startIndex = (curPage - 1) * defaultPageSize;
-      const endIndex = startIndex + defaultPageSize;
+  useEffect(() => {
+    getRatedMovies();
+  }, [guestId, curPage]);
 
-      const moviesData = moviesList.slice(startIndex, endIndex);
+  const getRatedMovies = () => {
+    setIsLoading(true);
 
-      this.setState({
-        moviesData: moviesData,
-        curPage: curPage,
-        noResults: false,
-        totalRes: moviesList.length,
-        rate: moviesList.rate,
+    movieService
+      .getRatedMovies(guestId, curPage)
+      .then(([totalResults, movies]) => {
+        setRatedMovies(movies);
+        setTotalRes(totalResults);
+        setNoResults(totalResults === 0);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error('Ошибка при получении оцененных фильмов:', error);
+        setError('Произошла ошибка при получении оцененных фильмов.');
+        setIsLoading(false);
       });
-    } else {
-      return;
-    }
-  }
-
-  onChangePage = (page) => {
-    this.setState({ curPage: page }, () => {
-      this.getRatedMovies();
-    });
   };
 
-  render() {
-    console.log(this.state.moviesData);
-    const { moviesData, curPage, noResults, totalRes, rate, defaultPageSize } = this.state;
-    const pagination =
-      moviesData.length > 0 ? (
-        <Pagination
-          className="pagination"
-          onChange={this.onChangePage}
-          defaultCurrent={1}
-          current={curPage}
-          total={totalRes}
-          defaultPageSize={defaultPageSize}
-          showSizeChanger={false}
-        />
-      ) : null;
+  const onChangePage = (page) => {
+    setCurPage(page);
+  };
 
-    return (
-      <>
-        <MovieList moviesData={moviesData} noResults={noResults} rate={rate} />
-        {pagination}
-      </>
-    );
-  }
-}
+  const pagination = ratedMovies ? (
+    <Pagination
+      className="pagination"
+      onChange={onChangePage}
+      defaultCurrent={1}
+      current={curPage}
+      total={totalRes}
+      defaultPageSize={defaultPageSize}
+      showSizeChanger={false}
+    />
+  ) : null;
+
+  return (
+    <>
+      <MovieList moviesData={ratedMovies} noResults={noResults} />
+      {pagination}
+    </>
+  );
+};
 
 export default RatedPage;

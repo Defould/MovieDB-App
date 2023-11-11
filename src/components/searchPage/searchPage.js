@@ -9,10 +9,6 @@ import MovieList from '../movieList/movieList';
 import './searchPage.scss';
 
 class SearchPage extends Component {
-  componentDidMount() {
-    this.getSession();
-  }
-
   state = {
     moviesData: [],
     isLoading: false,
@@ -24,35 +20,19 @@ class SearchPage extends Component {
     rate: 0,
   };
 
-  getSession = () => {
-    const session = new MovieService();
-    session
-      .getGuestSession()
-      .then((res) => console.log(res))
-      .catch((e) => console.log(e));
-  };
+  movieService = new MovieService();
 
   getMovies = () => {
-    const movieService = new MovieService();
     const { input, curPage } = this.state;
 
     this.setState({ moviesData: [], isLoading: true, noResults: false });
 
-    movieService
+    this.movieService
       .getSearchMovies(input, curPage)
       .then(([totalRes, movieData]) => {
         if (movieData.length === 0) {
           return this.setState({ isLoading: false, noResults: true });
         } else {
-          //продебажить
-          // const moviesList = JSON.parse(localStorage.getItem('ratedMovies'));
-          // const moviesData = movieData.map((movie) => {
-          //   const ratedMovie = moviesList.find((m) => m.id === movie.id);
-          //   if (ratedMovie) {
-          //     return { ...movie, rate: ratedMovie.rate };
-          //   }
-          //   return movie;
-          // });
           this.setState({ moviesData: movieData, isLoading: false, totalRes: totalRes });
         }
       })
@@ -108,6 +88,7 @@ class SearchPage extends Component {
           noResults={noResults}
           estimation={estimation}
           rate={rate}
+          sessionId={this.props.sessionId}
         />
         {pagination}
       </>
