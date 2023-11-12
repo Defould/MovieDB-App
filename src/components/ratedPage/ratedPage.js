@@ -6,14 +6,13 @@ import MovieService from '../../services/movieService';
 import MovieList from '../movieList/movieList';
 
 const RatedPage = () => {
-  const [ratedMovies, setRatedMovies] = useState([]);
+  const [moviesData, setMoviesData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [curPage, setCurPage] = useState(1);
   const [noResults, setNoResults] = useState(false);
   const [totalRes, setTotalRes] = useState(0);
   const defaultPageSize = 20;
-  // console.log(ratedMovies);
 
   const guestId = useContext(GuestId);
 
@@ -29,7 +28,7 @@ const RatedPage = () => {
     movieService
       .getRatedMovies(guestId, curPage)
       .then(([totalResults, movies]) => {
-        setRatedMovies(movies);
+        setMoviesData(movies);
         setTotalRes(totalResults);
         setNoResults(totalResults === 0);
         setIsLoading(false);
@@ -45,7 +44,7 @@ const RatedPage = () => {
     setCurPage(page);
   };
 
-  const pagination = ratedMovies ? (
+  const pagination = moviesData ? (
     <Pagination
       className="pagination"
       onChange={onChangePage}
@@ -59,7 +58,7 @@ const RatedPage = () => {
 
   return (
     <>
-      <MovieList moviesData={ratedMovies} noResults={noResults} />
+      <MovieList moviesData={moviesData} noResults={noResults} />
       {pagination}
     </>
   );

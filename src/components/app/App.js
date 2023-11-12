@@ -52,38 +52,3 @@ const App = () => {
 };
 
 export default App;
-
-// import { createContext, useContext, useState, useEffect } from 'react';
-// import { Tabs } from 'antd';
-
-// import { GenreProvider } from '../context/GenreContext';
-// import SearchPage from '../searchPage/searchPage';
-// import RatedPage from '../ratedPage/ratedPage';
-// import MovieService from '../../services/movieService';
-
-// import './App.css';
-
-// const GuestSessionContext = createContext();
-// const { Provider: GuestSessionProvider } = GuestSessionContext;
-
-// export function GuestSessionProviderWrapper({ children }) {
-//   const [guestSessionId, setGuestSessionId] = useState(null);
-
-//   useEffect(() => {
-//     const movieService = new MovieService();
-//     movieService
-//       .createGuestSession()
-//       .then((data) => {
-//         setGuestSessionId(data.guest_session_id);
-//       })
-//       .catch((error) => {
-//         console.error('Error creating guest session:', error);
-//       });
-//   }, []);
-
-//   return <GuestSessionProvider value={guestSessionId}>{children}</GuestSessionProvider>;
-// }
-
-// export function useGuestSession() {
-//   return useContext(GuestSessionContext);
-// }
